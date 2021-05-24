@@ -1,6 +1,18 @@
 (function () {
     console.log('initializing canvas');
 
+    function Player(x, y) {
+        this.x = x;
+        this.y = y;
+        this.width = 20;
+        this.height = 20;
+    }
+
+    Player.prototype.draw = function (canvasContext) {
+        canvasContext.fillStyle = 'blue';
+        canvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+
     const canvas = document.querySelector('#game-layer');
     const context = canvas.getContext('2d');
 
@@ -8,11 +20,7 @@
     context.fillStyle = 'grey';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Add additional boxes for game "entities"
-    context.fillStyle = 'red';
-    context.fillRect(5, 5, 10, 15);
-    context.fillStyle = 'blue';
-    context.fillRect(25, 25, 20, 20);
-    context.fillStyle = 'green';
-    context.fillRect(50, 50, 20, 40);
+    // Add the player entity
+    const player = new Player(100, 175);
+    player.draw(context);
 }());
