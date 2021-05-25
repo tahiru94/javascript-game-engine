@@ -9,9 +9,9 @@
         this.direction = -1;
     }
 
-    Player.prototype.draw = function (canvasContext) {
-        canvasContext.fillStyle = 'blue';
-        canvasContext.fillRect(this.x, this.y, this.width, this.height);
+    Player.prototype.draw = function (context) {
+        context.fillStyle = 'blue';
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
 
     Player.prototype.update = function (canvas) {
@@ -41,8 +41,8 @@
         }
     }
 
-    const canvas = document.querySelector('#game-layer');
-    const context = canvas.getContext('2d');
+    let canvas = document.querySelector('#game-layer');
+    let context = canvas.getContext('2d');
 
     // Fill the canvas
     context.fillStyle = 'grey';
@@ -55,4 +55,29 @@
     const enemy1 = new Enemy(20, 25);
     const enemy2 = new Enemy(80, 25);
     const enemy3 = new Enemy(160, 25);
+
+    function frameUpdate() {
+        canvas = document.querySelector('#game-layer');
+        context = canvas.getContext('2d');
+
+        // Fill the canvas
+        context.fillStyle = 'grey';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        player.update(canvas);
+        player.draw(context);
+
+        enemy1.update(canvas);
+        enemy1.draw(context);
+
+        enemy2.update(canvas);
+        enemy2.draw(context);
+
+        enemy3.update(canvas);
+        enemy3.draw(context);
+
+        window.requestAnimationFrame(frameUpdate);
+    }
+
+    frameUpdate();
 }());
