@@ -66,4 +66,18 @@
             render: _render
         };
     })();
+
+    const physics = (function () {
+        function _update() {
+            let entities = game.entities(); // TODO: Implement
+
+            for (let i = 0; i < entities.length; i += 1) {
+                entities[i].y = entities[i].direction;
+            }
+        }
+
+        return {
+            update: _update
+        }
+    })();
 }());
