@@ -80,4 +80,43 @@
             update: _update
         }
     })();
+
+    const game = (function () {
+        let _gameFieldHeight = 200;
+        let _entities = [];
+
+        function _start() {
+            _entities.push(new Player(100, 175));
+            _entities.push(new Enemy(20, 25));
+            _entities.push(new Enemy(80, 25));
+            _entities.push(new Enemy(160, 25));
+
+            window.requestAnimationFrame(this.update.bind(this));
+        }
+
+        function _update() {
+            physics.update();
+
+            for (let i = 0; i < _entities.length; i += 1) {
+                _entities[i].update();
+            }
+
+            renderer.render();
+
+            window.requestAnimationFrame(this.update.bind(this));
+        }
+
+        return {
+            start: _start,
+            update: _update,
+            entities: function () {
+                return _entities;
+            },
+            gameFieldHeight: function () {
+                return _gameFieldHeight;
+            }
+        };
+    })();
+
+    game.start();
 }());
