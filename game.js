@@ -9,11 +9,6 @@
         this.direction = -1;
     }
 
-    Player.prototype.draw = function (context) {
-        context.fillStyle = 'blue';
-        context.fillRect(this.x, this.y, this.width, this.height);
-    }
-
     Player.prototype.update = function (canvas) {
         this.y = this.y + this.direction;
         if (this.y <= 0 || (this.y + this.height >= canvas.height)) {
@@ -29,11 +24,6 @@
         this.direction = 1;
     }
 
-    Enemy.prototype.draw = function (canvasContext) {
-        canvasContext.fillStyle = "red";
-        canvasContext.fillRect(this.x, this.y, this.width, this.height);
-    };
-
     Enemy.prototype.update = function (canvas) {
         this.y = this.y + this.direction;
         if (this.y <= 0 || (this.y + this.height >= canvas.height)) {
@@ -41,43 +31,39 @@
         }
     }
 
-    let canvas = document.querySelector('#game-layer');
-    let context = canvas.getContext('2d');
+    const renderer = (function () {
+        function _drawEnemy(context, enemy) {
+            context.fillStyle = 'red';
+            context.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        }
 
-    // Fill the canvas
-    context.fillStyle = 'grey';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+        function _drawPlayer(context, player) {
+            context.fillStyle = 'blue';
+            context.fillRect(player.x, player.y, player.width, player.height);
+        }
 
-    // Add the player entity
-    const player = new Player(100, 175);
+        function _render() {
+            canvas = document.querySelector('#game-layer');
+            context = canvas.getContext('2d');
+            context.fillStyle = 'grey';
+            context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Add enemy entities
-    const enemy1 = new Enemy(20, 25);
-    const enemy2 = new Enemy(80, 25);
-    const enemy3 = new Enemy(160, 25);
+            let entity;
+            let entities = game.entities(); // TODO: Implement
 
-    function frameUpdate() {
-        canvas = document.querySelector('#game-layer');
-        context = canvas.getContext('2d');
+            for (let i = 0; i < entities.length; i += 1) {
+                entity = entities[i];
 
-        // Fill the canvas
-        context.fillStyle = 'grey';
-        context.fillRect(0, 0, canvas.width, canvas.height);
+                if (entity instanceof Enemy) {
+                    _drawEnemy(context, entity);
+                } else {
+                    _drawPlayer(context, entity);
+                }
+            }
+        }
 
-        player.update(canvas);
-        player.draw(context);
-
-        enemy1.update(canvas);
-        enemy1.draw(context);
-
-        enemy2.update(canvas);
-        enemy2.draw(context);
-
-        enemy3.update(canvas);
-        enemy3.draw(context);
-
-        window.requestAnimationFrame(frameUpdate);
-    }
-
-    frameUpdate();
+        return {
+            render: _render
+        };
+    })();
 }());
