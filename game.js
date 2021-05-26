@@ -9,9 +9,9 @@
         this.direction = -1;
     }
 
-    Player.prototype.update = function (canvas) {
+    Player.prototype.update = function () {
         this.y = this.y + this.direction;
-        if (this.y <= 0 || (this.y + this.height >= canvas.height)) {
+        if (this.y <= 0 || (this.y + this.height >= game.gameFieldHeight())) {
             this.direction *= -1;
         }
     }
@@ -26,7 +26,7 @@
 
     Enemy.prototype.update = function (canvas) {
         this.y = this.y + this.direction;
-        if (this.y <= 0 || (this.y + this.height >= canvas.height)) {
+        if (this.y <= 0 || (this.y + this.height >= game.gameFieldHeight())) {
             this.direction *= -1;
         }
     }
@@ -43,13 +43,13 @@
         }
 
         function _render() {
-            canvas = document.querySelector('#game-layer');
-            context = canvas.getContext('2d');
+            let canvas = document.querySelector('#game-layer');
+            let context = canvas.getContext('2d');
             context.fillStyle = 'grey';
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             let entity;
-            let entities = game.entities(); // TODO: Implement
+            let entities = game.entities();
 
             for (let i = 0; i < entities.length; i += 1) {
                 entity = entities[i];
@@ -69,10 +69,10 @@
 
     const physics = (function () {
         function _update() {
-            let entities = game.entities(); // TODO: Implement
+            let entities = game.entities();
 
             for (let i = 0; i < entities.length; i += 1) {
-                entities[i].y = entities[i].direction;
+                entities[i].y += entities[i].direction;
             }
         }
 
